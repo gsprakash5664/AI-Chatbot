@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat with Iris</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #fceabb, #f8b500);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #6a0572;
+            margin-bottom: 10px;
+        }
+
+        .chatbox {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 2px solid #f8b500;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #6a0572;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #a239ca;
+        }
+
+        .response {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #444;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h2>Meet Iris - Your Chat Assistant</h2>
+    <div class="chatbox">
+        <input type="text" id="userInput" placeholder="Type your question here..." required>
+        <br>
+        <button onclick="sendMessage()">Ask Iris</button>
+        <div class="response" id="responseBox"></div>
+    </div>
+    <div class="footer">
+        <p>Powered by Python, Flask and NLP | Created by G.S.Prakash</p>
+    </div>
+
+    <script>
+        function sendMessage() {
+    const userInput = document.getElementById("userInput").value;
+    fetch("/get", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "msg=" + encodeURIComponent(userInput)
+    })
+    .then(response => response.text())
+    .then(data => {
+        const responseBox = document.getElementById("responseBox");
+        if (data.startsWith("WEB:")) {
+            responseBox.innerText = data.replace("WEB: ", "");
+            responseBox.style.backgroundColor = "#fff3cd";  // light yellow
+            responseBox.style.border = "1px solid #f8b500";
+        } else {
+            responseBox.innerText = data;
+            responseBox.style.backgroundColor = "#f9f9f9";  // default
+            responseBox.style.border = "none";
+        }
+    });
+}
+    </script>
+</body>
+</html>
